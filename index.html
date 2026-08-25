@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Una pregunta importante 🦭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --azul-profundo:#5C1A2E;
+    --azul-medio:#8C2F45;
+    --aqua:#F5B8C4;
+    --crema:#FFF3F5;
+    --amarillo:#F4A5B8;
+    --coral:#D94F70;
+    --sombra: 0 20px 45px rgba(92,26,46,0.35);
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{
+    margin:0;
+    padding:0;
+    min-height:100vh;
+    width:100%;
+    overflow-x:hidden;
+  }
+
+  body{
+    font-family:'Nunito', sans-serif;
+    background:
+      radial-gradient(circle at 20% 15%, rgba(245,184,196,0.35), transparent 45%),
+      radial-gradient(circle at 85% 80%, rgba(244,165,184,0.3), transparent 40%),
+      linear-gradient(180deg, var(--azul-profundo) 0%, var(--azul-medio) 100%);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    padding:24px;
+  }
+
+  /* burbujas de fondo */
+  .burbuja{
+    position:fixed;
+    bottom:-60px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.12);
+    animation:subir linear infinite;
+    pointer-events:none;
+  }
+  @keyframes subir{
+    to{ transform:translateY(-110vh) translateX(20px); opacity:0; }
+  }
+
+  .card{
+    position:relative;
+    background:var(--crema);
+    border-radius:28px;
+    max-width:440px;
+    width:100%;
+    padding:38px 32px 44px;
+    text-align:center;
+    box-shadow:var(--sombra);
+    border:3px solid rgba(11,54,84,0.08);
+    animation:aparecer .6s cubic-bezier(.2,.9,.3,1.2);
+  }
+  @keyframes aparecer{
+    from{ opacity:0; transform:translateY(24px) scale(.96); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
+  }
+
+  .eyebrow{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-size:.72rem;
+    color:var(--azul-medio);
+    margin-bottom:6px;
+  }
+
+  h1{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:800;
+    font-size:1.65rem;
+    color:var(--azul-profundo);
+    margin:0 0 6px;
+    line-height:1.25;
+  }
+
+  .sub{
+    font-size:.98rem;
+    color:#3a5568;
+    margin:0 0 18px;
+  }
+
+  .foca-wrap{
+    position:relative;
+    width:180px;
+    height:180px;
+    margin:6px auto 18px;
+  }
+
+  .foca-img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:50%;
+    border:5px solid var(--amarillo);
+    box-shadow:0 12px 25px rgba(11,54,84,0.25);
+    animation:flotar 3.2s ease-in-out infinite;
+    display:block;
+  }
+
+  .foca-emoji-fallback{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    border:5px solid var(--amarillo);
+    background:linear-gradient(160deg, #cdeff2, #8fd6de);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:88px;
+    animation:flotar 3.2s ease-in-out infinite;
+    box-shadow:0 12px 25px rgba(11,54,84,0.25);
+  }
+
+  @keyframes flotar{
+    0%,100%{ transform:translateY(0) rotate(-2deg); }
+    50%{ transform:translateY(-10px) rotate(2deg); }
+  }
+
+  .globo{
+    position:absolute;
+    top:-18px;
+    right:-38px;
+    background:white;
+    color:var(--azul-profundo);
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:.78rem;
+    padding:8px 12px;
+    border-radius:14px;
+    box-shadow:0 6px 14px rgba(0,0,0,0.15);
+    max-width:150px;
+    line-height:1.15;
+    opacity:0;
+    transform:scale(.8);
+    transition:opacity .25s, transform .25s;
+    pointer-events:none;
+  }
+  .globo.show{ opacity:1; transform:scale(1); }
+  .globo::after{
+    content:"";
+    position:absolute;
+    bottom:-8px;
+    left:22px;
+    border-width:8px 8px 0 0;
+    border-style:solid;
+    border-color:white transparent transparent transparent;
+  }
+
+  .pregunta{
+    font-family:'Baloo 2', sans-serif;
+    font-size:1.3rem;
+    font-weight:700;
+    color:var(--azul-profundo);
+    margin:4px 0 22px;
+  }
+
+  .botones{
+    position:relative;
+    display:flex;
+    gap:16px;
+    justify-content:center;
+    align-items:center;
+    min-height:64px;
+  }
+
+  button{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:1.05rem;
+    border:none;
+    border-radius:16px;
+    padding:14px 26px;
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+
+  #btnSi{
+    background:var(--coral);
+    color:white;
+    box-shadow:0 10px 20px rgba(255,111,89,0.4);
+  }
+  #btnSi:hover{ transform:translateY(-3px) scale(1.04); }
+
+  #btnNo{
+    background:transparent;
+    color:var(--azul-medio);
+    border:2.5px solid var(--azul-medio);
+    position:relative;
+    z-index:5;
+  }
+
+  #btnNo.escapando{
+    position:fixed;
+    transition: top .28s cubic-bezier(.3,1.4,.5,1), left .28s cubic-bezier(.3,1.4,.5,1);
+  }
+
+  .footer-nota{
+    margin-top:20px;
+    font-size:.78rem;
+    color:#7a8ba0;
+  }
+
+  .resultado{
+    display:none;
+    text-align:center;
+  }
+  .resultado.show{ display:block; }
+  .contenido-principal.hide{ display:none; }
+
+  .confeti{
+    position:fixed;
+    top:-20px;
+    border-radius:2px;
+    pointer-events:none;
+    animation:caer linear forwards;
+  }
+  @keyframes caer{
+    to{ transform:translateY(110vh) rotate(540deg); opacity:.9; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .foca-img,.foca-emoji-fallback,.burbuja{ animation:none !important; }
+  }
+
+  @media (max-width:420px){
+    .card{ padding:30px 20px 36px; }
+    h1{ font-size:1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="contenido-principal" id="principal">
+    <div class="eyebrow">URGENTEEE</div>
+    <h1>tienes una invitacion, oye, UNA INVITACION!</h1>
+    <p class="sub">de parte de: pollito</p>
+
+    <div class="foca-wrap">
+      <!-- Reemplaza "foca.jpg" por el nombre de tu foto de la foca.
+           Ponla en la misma carpeta que este archivo HTML.
+           Si no encuentra la imagen, se muestra un emoji de foca como respaldo. -->
+      <img src="foca.jpg" alt="Foca" class="foca-img" id="focaImg"
+           onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'foca-emoji-fallback',id:'focaImg',innerHTML:'🦭'}))">
+      <div class="globo" id="globo">Dale que sí 👀</div>
+    </div>
+
+    <p class="pregunta">¿quieres salir conmigo el 30 de agosto?</p>
+
+    <div class="botones">
+      <button id="btnSi">no😡</button>
+      <button id="btnNo">si</button>
+    </div>
+
+    <p class="footer-nota">jejee mira mira dale que si</p>
+  </div>
+
+  <div class="resultado" id="resultado">
+    <div class="eyebrow">confirmadisimo!!</div>
+    <h1 id="resultadoTitulo">ss un siii</h1>
+    <p class="sub" id="resultadoTexto">ya casi nos vemos, el plan va estar bueno!</p>
+    <div style="font-size:70px; margin-top:10px;">🦭💛</div>
+  </div>
+</div>
+
+<script>
+  const btnSi = document.getElementById('btnSi');
+  const btnNo = document.getElementById('btnNo');
+  const globo = document.getElementById('globo');
+  const principal = document.getElementById('principal');
+  const resultado = document.getElementById('resultado');
+  const resultadoTitulo = document.getElementById('resultadoTitulo');
+  const resultadoTexto = document.getElementById('resultadoTexto');
+
+  const frasesNo = [
+    "mira inverti los botones JJAJAJA",
+    "este es del no, vas a seguir presionandolo?",
+    "mentira era broma, dale de nuevo",
+    "la foquita se va a poner triste ves",
+    "ultima oportunidad, arrepientete",
+    "ok, ya es personal",
+    "el botón sí funciona, el 'no' es decorativo",
+    "es enserio que no :(",
+    "bueno, voy a insistir una vez más...",
+  ];
+
+  let clicksNo = 0;
+
+  function mostrarGlobo(texto){
+    globo.textContent = texto;
+    globo.classList.add('show');
+    clearTimeout(mostrarGlobo._t);
+    mostrarGlobo._t = setTimeout(() => globo.classList.remove('show'), 1600);
+  }
+
+  function moverBotonNo(){
+    btnNo.classList.add('escapando');
+    const margen = 90;
+    const maxX = window.innerWidth - margen;
+    const maxY = window.innerHeight - margen;
+    const x = Math.max(20, Math.random() * maxX);
+    const y = Math.max(20, Math.random() * maxY);
+    btnNo.style.left = x + 'px';
+    btnNo.style.top = y + 'px';
+  }
+
+  function confirmarCita(){
+    resultadoTitulo.textContent = "bueno, entonces queda confirmado, socia 🦭💛";
+    resultadoTexto.textContent = "ya no había forma de escapar igual. Nos vemos pronto.";
+    principal.classList.add('hide');
+    resultado.classList.add('show');
+    lanzarConfeti();
+  }
+
+  btnNo.addEventListener('click', () => {
+    clicksNo++;
+
+    if (clicksNo >= 10){
+      confirmarCita();
+      return;
+    }
+
+    const frase = frasesNo[Math.min(clicksNo - 1, frasesNo.length - 1)];
+    mostrarGlobo(frase);
+    moverBotonNo();
+
+    // crece el botón de sí cada par de intentos, para presionar amablemente
+    const escala = Math.min(1 + clicksNo * 0.05, 1.5);
+    btnSi.style.transform = `scale(${escala})`;
+  });
+
+  // en móviles, un toque también debería esquivar (por si el hover no aplica)
+  btnNo.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    btnNo.click();
+  }, { passive:false });
+
+  btnSi.addEventListener('click', () => {
+    resultadoTitulo.textContent = "¡es una salida!! 🎉";
+    resultadoTexto.textContent = "nos vemos pronto, pollito";
+    principal.classList.add('hide');
+    resultado.classList.add('show');
+    lanzarConfeti();
+  });
+
+  function lanzarConfeti(){
+    const colores = ['#D94F70','#F4A5B8','#F5B8C4','#8C2F45','#5C1A2E'];
+    for(let i=0;i<60;i++){
+      const c = document.createElement('div');
+      c.className = 'confeti';
+      c.style.left = Math.random()*100 + 'vw';
+      c.style.width = (6+Math.random()*6)+'px';
+      c.style.height = (6+Math.random()*6)+'px';
+      c.style.background = colores[Math.floor(Math.random()*colores.length)];
+      c.style.animationDuration = (2.2+Math.random()*1.8)+'s';
+      c.style.animationDelay = (Math.random()*0.5)+'s';
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(), 4500);
+    }
+  }
+
+  // burbujas de fondo decorativas
+  for(let i=0;i<14;i++){
+    const b = document.createElement('div');
+    b.className = 'burbuja';
+    const size = 10 + Math.random()*30;
+    b.style.width = size+'px';
+    b.style.height = size+'px';
+    b.style.left = Math.random()*100+'vw';
+    b.style.animationDuration = (6+Math.random()*8)+'s';
+    b.style.animationDelay = (Math.random()*6)+'s';
+    document.body.appendChild(b);
+  }
+</script>
+
+</body>
+</html>
